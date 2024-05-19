@@ -1,6 +1,8 @@
 package com.example.SpringExercise.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
+import org.aspectj.apache.bcel.classfile.Unknown;
 
 import java.util.List;
 
@@ -10,6 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CompanyDetails {
     private String companyNumber;
     private String companyType;

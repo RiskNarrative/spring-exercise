@@ -28,12 +28,9 @@ public class SecretsManagerUtil {
     public String getSecret() throws JsonProcessingException {
         BasicAWSCredentials awsCreds = new BasicAWSCredentials(new String(Base64.getDecoder().decode(encodedAwsAccessKey)), new String(Base64.getDecoder().decode(encodedAwsSecretKey)).toString());
         AWSSecretsManager client = AWSSecretsManagerClientBuilder.standard().withRegion(REGION).withCredentials(new AWSStaticCredentialsProvider(awsCreds)).build();
-
         GetSecretValueRequest getSecretValueRequest = new GetSecretValueRequest().withSecretId(SECRET_NAME);
         GetSecretValueResult getSecretValueResult;
-
         getSecretValueResult = client.getSecretValue(getSecretValueRequest);
-
         String secretString = getSecretValueResult.getSecretString();
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(secretString);
