@@ -12,7 +12,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(CustomException.class)
     public ResponseEntity<ErrorDto> handleCustomException(CustomException ex) {
         ErrorDto errorResponse = new ErrorDto(ex.getErrorCode(), ex.getErrorMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(HttpClientErrorException.class)

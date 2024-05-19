@@ -9,30 +9,27 @@ import com.amazonaws.services.secretsmanager.model.GetSecretValueResult;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Base64;
 
+@Component
 public class SecretsManagerUtil {
 
-    @Value("${aws.accessKey}")
-    public static String awsAccessKey;
+    @Value("${encoded.aws.accessKey}")
+    private String encodedAwsAccessKey;
 
-    @Value("${aws.secretKey}")
-    public static String awsSecretKey;
+    @Value("${encoded.aws.secretKey}")
+    private String encodedAwsSecretKey;
     private static final String SECRET_NAME = "trueProxyApiKey";
     private static final String REGION = "us-east-1"; // Change to your region
 
-    public static String getSecret() throws JsonProcessingException {
-        BasicAWSCredentials awsCreds = new BasicAWSCredentials("AKIAWAGLCRRYTHXZFDHS", "2c3yT3ap8tDRusC3YYu2mh+jO7XMQbrjdxLXwqHb");
+    public String getSecret() throws JsonProcessingException {
+        BasicAWSCredentials awsCreds = new BasicAWSCredentials(new String(Base64.getDecoder().decode(encodedAwsAccessKey)), new String(Base64.getDecoder().decode(encodedAwsSecretKey)).toString());
+        AWSSecretsManager client = AWSSecretsManagerClientBuilder.standard().withRegion(REGION).withCredentials(new AWSStaticCredentialsProvider(awsCreds)).build();
 
-        AWSSecretsManager client = AWSSecretsManagerClientBuilder.standard()
-                .withRegion(REGION)
-                .withCredentials(new AWSStaticCredentialsProvider(awsCreds))
-                .build();
-
-        GetSecretValueRequest getSecretValueRequest = new GetSecretValueRequest()
-                .withSecretId(SECRET_NAME);
+        GetSecretValueRequest getSecretValueRequest = new GetSecretValueRequest().withSecretId(SECRET_NAME);
         GetSecretValueResult getSecretValueResult;
 
         getSecretValueResult = client.getSecretValue(getSecretValueRequest);

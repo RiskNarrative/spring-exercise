@@ -34,7 +34,6 @@ public class CompanyService {
     private TruProxyClient truProxyClient;
 
     /**
-     *
      * @param request
      * @param onlyActiveCompanies
      * @return
@@ -73,7 +72,6 @@ public class CompanyService {
     }
 
     /**
-     *
      * @param onlyActiveCompanies
      * @param response
      * @return
@@ -92,7 +90,6 @@ public class CompanyService {
     }
 
     /**
-     *
      * @param companyNumber
      * @return
      * @throws JsonProcessingException
