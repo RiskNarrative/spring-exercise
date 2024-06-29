@@ -1,0 +1,8 @@
+lexisnexis\rn\springboot\service\CompanyService.class
+lexisnexis\rn\springboot\repository\CompanyRepository.class
+lexisnexis\rn\springboot\model\Company.class
+lexisnexis\rn\springboot\model\Officer.class
+lexisnexis\rn\springboot\repository\OfficerRepository.class
+lexisnexis\rn\springboot\CompanySearchApplication.class
+lexisnexis\rn\springboot\controller\SearchController.class
+lexisnexis\rn\springboot\model\Address.class
