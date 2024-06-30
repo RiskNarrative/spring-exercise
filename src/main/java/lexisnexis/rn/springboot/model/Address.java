@@ -1,8 +1,5 @@
 package lexisnexis.rn.springboot.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
 import lombok.Builder;
 import lombok.Data;
 
@@ -10,10 +7,9 @@ import lombok.Data;
 @Builder
 public class Address {
 
-    Long addressId;
-    String premises;
     String locality;
-    String addressLine1;
+    String postal_code;
+    String premises;
+    String address_line_1;
     String country;
-    String postalCode;
 }

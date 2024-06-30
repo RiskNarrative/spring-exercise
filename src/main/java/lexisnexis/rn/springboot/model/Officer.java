@@ -1,7 +1,8 @@
 package lexisnexis.rn.springboot.model;
 
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.OneToOne;
 import lombok.Builder;
 import lombok.Data;
 

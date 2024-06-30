@@ -1,7 +1,5 @@
 package lexisnexis.rn.springboot.controller;
 
-import com.google.gson.GsonBuilder;
-import com.google.json.JsonSanitizer;
 import lexisnexis.rn.springboot.service.CompanyService;
 import lexisnexis.rn.springboot.utils.CompanySearchRequest;
 import lexisnexis.rn.springboot.utils.CompanySearchResponse;
@@ -24,23 +22,10 @@ public class Controller {
 
     @PostMapping("/search")
     public ResponseEntity<CompanySearchResponse> searchCompanies(@RequestHeader("x-api-key") String apiKey,
-                                                                 @RequestParam(defaultValue = "true") boolean activeOnly,
-                                                                 final @RequestBody String jsonInput) throws Exception {
+                                                                 final @RequestBody CompanySearchRequest request) throws Exception {
 
-        log.info("Received request {}", jsonInput);
-        CompanySearchRequest request = getSearchRequest(jsonInput);
-        CompanySearchResponse response = companyService.findCompany(apiKey, request, activeOnly);
+        log.info("Received request {}", request);
+        CompanySearchResponse response = companyService.findCompany(apiKey, request);
         return ResponseEntity.ok(response);
     }
-
-    @GetMapping("/hello")
-    public String returnHello() {
-        return "print me";
-
-    }
-
-    private CompanySearchRequest getSearchRequest(String jsonInput) {
-        return new GsonBuilder().create().fromJson(JsonSanitizer.sanitize(jsonInput), CompanySearchRequest.class);
-    }
-
 }

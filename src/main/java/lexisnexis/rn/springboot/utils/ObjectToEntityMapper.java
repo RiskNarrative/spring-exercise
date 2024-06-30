@@ -23,14 +23,13 @@ public class ObjectToEntityMapper {
 
     public static Company mapTruProxyCompanyToCompany(CompanyTruProxy companyTruProxy, List<Officer> officerList) {
 
-        return Company.builder().companyNumber(companyTruProxy.getCompanyNumber())
-                .companyStatus(companyTruProxy.getCompanyStatus())
-                .companyType(companyTruProxy.getCompanyType())
+        return Company.builder().companyNumber(companyTruProxy.getCompany_number())
+                .companyType(companyTruProxy.getCompany_type())
                 .title(companyTruProxy.getTitle())
-                .dateOfCreation(companyTruProxy.getDateOfCreation())
+                .companyStatus(companyTruProxy.getCompany_status())
+                .dateOfCreation(companyTruProxy.getDate_of_creation())
                 .address(companyTruProxy.getAddress())
                 .officers(officerList).build();
-
     }
 
     public static Company mapEntityToCompany(CompanyEntity companyEntity) {
@@ -40,28 +39,56 @@ public class ObjectToEntityMapper {
                 .title(companyEntity.getTitle())
                 .dateOfCreation(companyEntity.getDateOfCreation())
                 .address(mapEntityToAddress(companyEntity.getAddress()))
-                .officers(companyEntity.getOfficerEntities().stream()
+                .officers(companyEntity.getOfficers().stream()
                         .map(ObjectToEntityMapper::mapEntityToOfficer).collect(Collectors.toList()))
+                .build();
+    }
+
+    public static CompanyEntity mapCompanyToEntity(Company company) {
+        return CompanyEntity.builder().companyNumber(company.getCompanyNumber())
+                .companyType(company.getCompanyType())
+                .title(company.getTitle())
+                .companyStatus(company.getCompanyStatus())
+                .dateOfCreation(company.getDateOfCreation())
+                .address(mapAddressToEntity(company.getAddress()))
+                .officers(company.getOfficers().stream()
+                        .map(ObjectToEntityMapper::mapOfficerToEntity).collect(Collectors.toList()))
+                .build();
+    }
+
+    public static OfficerEntity mapOfficerToEntity(Officer officer) {
+
+        return OfficerEntity.builder().name(officer.getName())
+                .officerRole(officer.getOfficerRole())
+                .appointedOn(officer.getAppointedOn())
+                .address(mapAddressToEntity(officer.getAddress())).build();
+    }
+
+    public static AddressEntity mapAddressToEntity(Address address) {
+        return AddressEntity.builder().locality(address.getLocality())
+                .postalCode(address.getPostal_code())
+                .premises(address.getPremises())
+                .addressLine1(address.getAddress_line_1())
+                .country(address.getCountry())
                 .build();
 
     }
 
     public static Officer mapEntityToOfficer(OfficerEntity officerEntity) {
 
-        return Officer.builder().officerRole(officerEntity.getOfficeRole())
-                .name(officerEntity.getName())
+        return Officer.builder().name(officerEntity.getName())
+                .officerRole(officerEntity.getOfficerRole())
                 .appointedOn(officerEntity.getAppointedOn())
                 .address(mapEntityToAddress(officerEntity.getAddress())).build();
-
     }
 
     public static Address mapEntityToAddress(AddressEntity addressEntity) {
-        return Address.builder().addressId(addressEntity.getAddressId())
-                .country(addressEntity.getCountry())
-                .addressLine1(addressEntity.getAddressLine1())
+        return Address.builder().locality(addressEntity.getLocality())
+                .postal_code(addressEntity.getPostalCode())
                 .premises(addressEntity.getPremises())
-                .postalCode(addressEntity.getPostalCode())
-                .locality(addressEntity.getLocality()).build();
+                .address_line_1(addressEntity.getAddressLine1())
+                .country(addressEntity.getCountry())
+                .build();
 
     }
 

@@ -27,10 +27,10 @@ public class CompanyService {
     @Autowired
     CompanyRepository companyRepository;
 
-    Predicate<CompanyTruProxy> isActiveCompany = (company) -> company.getCompanyStatus().equalsIgnoreCase("ACTIVE");
+    Predicate<CompanyTruProxy> isActiveCompany = (company) -> company.getCompany_status().equalsIgnoreCase("ACTIVE");
     Predicate<OfficerTruProxy> isActiveOfficer = (officer) -> !StringUtils.hasLength(officer.getResigned_on());
 
-    public CompanySearchResponse findCompany(String apiKey, CompanySearchRequest request, boolean activeOnly) throws Exception {
+    public CompanySearchResponse findCompany(String apiKey, CompanySearchRequest request) throws Exception {
         validateInput(request);
         CompanySearchResponse response = new CompanySearchResponse();
         // first find in local database
@@ -38,20 +38,23 @@ public class CompanyService {
             if (request != null && StringUtils.hasLength(request.getCompanyNumber())) {
                 Optional<CompanyEntity> optionalCompany = companyRepository.findById(request.getCompanyNumber());
                 if (optionalCompany.isPresent()) {
+                    log.info("Found company in local repository");
                     CompanyEntity companyEntity = optionalCompany.get();
                     response = buildResponse(companyEntity);
                 } else {
                     //fetch from TruProxy API if not found in the database
-                    ResponseEntity<TruProxyResultCompany> apiResponse = truProxyServiceInvoker.searchCompanies(apiKey, request, activeOnly);
-
+                    ResponseEntity<TruProxyResultCompany> apiResponse = truProxyServiceInvoker.searchCompanies(apiKey, request);
+                    log.info("TruProxy api Response: {}", apiResponse);
                     List<CompanyTruProxy> activeCompanies = filterActive(apiResponse);
 
                     response.setTotalResults(activeCompanies.size());
 
                     List<Company> companies = new ArrayList<>();
                     for (CompanyTruProxy companyTruProxy : activeCompanies) {
-                        List<Officer> officers = findOfficers(apiKey, companyTruProxy.getCompanyNumber());
-                        companies.add(ObjectToEntityMapper.mapTruProxyCompanyToCompany(companyTruProxy, officers));
+                        List<Officer> officers = findOfficers(apiKey, companyTruProxy.getCompany_number());
+                        Company company = ObjectToEntityMapper.mapTruProxyCompanyToCompany(companyTruProxy, officers);
+                        companies.add(company);
+                        companyRepository.save(ObjectToEntityMapper.mapCompanyToEntity(company));
                     }
                     response.setItems(companies);
                 }
@@ -88,7 +91,7 @@ public class CompanyService {
 
     public List<CompanyTruProxy> filterActive(ResponseEntity<TruProxyResultCompany> response) {
         List<CompanyTruProxy> companies = Objects.requireNonNull(response.getBody()).getItems();
-
+        log.info("companies list from truProxy {}", companies);
         if (companies == null || companies.isEmpty()) {
             throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "No company found.");
         }

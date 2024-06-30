@@ -26,7 +26,7 @@ public class TruProxyServiceInvoker {
     @Value("${truproxy.baseUrl}")
     String baseUrl;
 
-    public ResponseEntity<TruProxyResultCompany> searchCompanies(String apiKey, CompanySearchRequest request, boolean activeOnly) {
+    public ResponseEntity<TruProxyResultCompany> searchCompanies(String apiKey, CompanySearchRequest request) {
         try {
             URI endpoint = getUriForCompanySearch(request.getCompanyName(), request.getCompanyNumber());
 

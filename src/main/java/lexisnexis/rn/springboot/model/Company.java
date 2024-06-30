@@ -1,6 +1,9 @@
 package lexisnexis.rn.springboot.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import lombok.Builder;
 import lombok.Data;
 
@@ -19,7 +22,4 @@ public class Company {
     Address address;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Officer> officers;
-//
-
-
 }

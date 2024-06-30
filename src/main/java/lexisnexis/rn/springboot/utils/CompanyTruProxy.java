@@ -5,11 +5,10 @@ import lombok.Data;
 
 @Data
 public class CompanyTruProxy {
-    private String companyStatus;
-    private String dateOfCreation;
-    private String companyNumber;
+    private String company_number;
+    private String company_type;
     private String title;
-    private String companyType;
+    private String company_status;
+    private String date_of_creation;
     private Address address;
-    private String description;
 }
