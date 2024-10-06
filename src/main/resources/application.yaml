@@ -1,0 +1,4 @@
+spring.application.name: spring-exercise
+TruProxyAPI:
+  baseUrl: http://localhost:9000
+  apiToken: XXXXXXXX
