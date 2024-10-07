@@ -1,9 +1,0 @@
-spring:
-  application:
-    name: CompanySearchApplication
-server:
-  port: 8080
-
-application:
-  config:
-    truProxyUrl: https://exercise.trunarrative.cloud/TruProxyAPI/rest/Companies/v1/
